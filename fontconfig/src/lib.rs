@@ -275,13 +275,15 @@ impl<'fc> Pattern<'fc> {
         }
     }
 
-    fn default_substitute(&mut self) {
+    /// Perform default substitutions.
+    pub fn default_substitute(&mut self) {
         unsafe {
             ffi_dispatch!(LIB, FcDefaultSubstitute, self.pat);
         }
     }
 
-    fn config_substitute(&mut self) {
+    /// Perform substitutions from config.
+    pub fn config_substitute(&mut self) {
         unsafe {
             ffi_dispatch!(
                 LIB,
@@ -295,9 +297,6 @@ impl<'fc> Pattern<'fc> {
 
     /// Get the best available match for this pattern, returned as a new pattern.
     pub fn font_match(&mut self) -> Pattern {
-        self.default_substitute();
-        self.config_substitute();
-
         unsafe {
             let mut res = sys::FcResultNoMatch;
             Pattern::from_pattern(
